@@ -1,0 +1,25 @@
+# Brouillons : infrastructures non terminées, jamais publiées
+Infras-en-cours/
+
+# Fichiers système Windows
+Thumbs.db
+desktop.ini
+*.lnk
+
+# Images disque et machines virtuelles
+*.iso
+*.img
+*.qcow2
+*.vmdk
+*.vmx
+*.vmxf
+*.vmsd
+*.nvram
+*.ova
+*.ovf
+*.vdi
+
+# Sauvegardes et fichiers temporaires
+*.bak
+*.tmp
+~$*
