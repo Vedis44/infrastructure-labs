@@ -95,13 +95,13 @@ flowchart LR
 
 Les infrastructures sont listées dans leur **ordre de publication**. Le catalogue s'enrichit à chaque nouvelle infrastructure terminée et validée à 100 %.
 
-| # | Infrastructure | Domaine | Thèmes abordés | Validée le |
-|---|----------------|---------|----------------|------------|
-| — | *Première infrastructure en cours de finalisation* | — | — | — |
+| # | Infrastructure | Domaine | Thèmes abordés | Hyperviseur | Validée le |
+|---|----------------|---------|----------------|-------------|------------|
+| — | *Première infrastructure en cours de finalisation* | — | — | — | — |
 
 <!--
 Modèle de ligne à copier pour chaque nouvelle infrastructure validée :
-| 01 | [Nom de l'infrastructure](<./Nom du dossier/>) | Domaine | Thème 1, thème 2, thème 3 | JJ/MM/AAAA |
+| 01 | [Nom de l'infrastructure](<./Nom du dossier/>) | Domaine | Thème 1, thème 2, thème 3 | Hyperviseur | JJ/MM/AAAA |
 -->
 
 ---
@@ -111,7 +111,7 @@ Modèle de ligne à copier pour chaque nouvelle infrastructure validée :
 Chaque infrastructure est isolée dans son propre dossier et suit toujours la même structure interne :
 
 ```
-Infrastructure-labs/
+infrastructure-labs/
 │
 ├── README.md                          ← Ce fichier (présentation globale)
 ├── README_EN.md                       ← Version anglaise
@@ -137,7 +137,7 @@ Tous les guides de déploiement respectent le même squelette, pour qu'un lecteu
 2. **Schéma** : topologie réseau complète (machines, interfaces, réseaux, flux).
 3. **Plan de déploiement** : les grandes phases, dans l'ordre d'exécution.
 4. **Sommaire** : navigation rapide dans le guide.
-5. **Prérequis** : matériel, ISO, ressources et connaissances nécessaires.
+5. **Prérequis** : environnement de réalisation (machine hôte, système, hyperviseur et versions exactes), matériel, ISO et connaissances nécessaires.
 6. **Plan d'adressage** : IP, masques, passerelles, DNS, noms d'hôtes.
 7. **Étapes de déploiement** : bloc par bloc, chaque étape accompagnée de :
    - l'**objectif** de l'étape ;
@@ -152,11 +152,22 @@ Tous les guides de déploiement respectent le même squelette, pour qu'un lecteu
 
 ## 🛠️ Environnement technique
 
-Technologies et outils couverts par l'ensemble des guides :
+### Machines hôtes
+
+Les labs sont réalisés sur deux machines physiques, chacune avec ses propres hyperviseurs :
+
+| Machine hôte | Système | Hyperviseurs utilisés |
+|--------------|---------|-----------------------|
+| **PC 1** | Windows 11 Pro | VMware Workstation Pro, Hyper-V |
+| **PC 2** | CachyOS (distribution Linux basée sur Arch Linux) | KVM / QEMU, administré avec virt-manager |
+
+> 💡 Le choix de l'hyperviseur dépend de l'infrastructure. Chaque guide précise dans ses prérequis la machine hôte utilisée, les versions exactes des logiciels et les réglages particuliers de l'hôte (par exemple l'état de Hyper-V sous Windows), pour que le lab soit reproductible à l'identique.
+
+### Technologies couvertes
 
 | Domaine | Technologies |
 |---------|--------------|
-| **Virtualisation** | VMware Workstation, Proxmox VE (VM et conteneurs LXC) |
+| **Virtualisation** | VMware Workstation Pro, Hyper-V, KVM / QEMU (virt-manager), Proxmox VE (VM et conteneurs LXC) |
 | **Pare-feu / routage** | OPNsense |
 | **Systèmes** | Windows Server, Windows 10/11, Debian |
 | **Annuaire & identité** | Active Directory (AD DS), DNS, DHCP, GPO |
@@ -179,10 +190,11 @@ Pour faciliter la lecture, les guides utilisent des conventions communes :
 | **Gras** | Élément d'interface (menu, bouton, onglet) |
 | `Menu > Sous-menu > Option` | Chemin de navigation dans une interface graphique |
 | `<VALEUR>` | Valeur à adapter à ton environnement |
-| `#` en début de ligne | Commande exécutée en **root** |
-| `$` en début de ligne | Commande exécutée en utilisateur standard |
+| « en root » avant un bloc | Les commandes du bloc s'exécutent avec le compte **root** |
 
 Encadrés utilisés dans les guides :
+
+> 🎯 **Objectif** : ce que la phase permet d'accomplir.
 
 > 💡 **Astuce** : conseil pratique pour gagner du temps ou mieux comprendre.
 
@@ -198,7 +210,7 @@ Encadrés utilisés dans les guides :
 
 1. **Choisis une infrastructure** dans le [catalogue](#-catalogue-des-infrastructures).
 2. **Lis son README** pour comprendre son utilité et sa topologie avant de commencer.
-3. **Vérifie les prérequis** : ressources de ta machine hôte, ISO, versions.
+3. **Vérifie les prérequis** : machine hôte, hyperviseur, ISO, versions.
 4. **Suis le guide dans l'ordre**, sans sauter d'étape : chaque bloc s'appuie sur le précédent.
 5. **Valide chaque vérification** avant de continuer : une erreur non corrigée se répercute sur toute la suite.
 6. En cas de blocage, consulte la section **Dépannage** en fin de guide.
@@ -225,8 +237,8 @@ Je ne pourrai être tenu responsable d'une mauvaise utilisation de ces guides ho
 
 Passionné par l'administration systèmes et réseaux, je documente mes labs pour ancrer mes connaissances et les partager.
 
-- 💼 LinkedIn : `<lien>`
-- 🐙 GitHub : `<lien>`
+- 💼 LinkedIn : `https://www.linkedin.com/in/florian-hebert-89945b424/`
+- 🐙 GitHub : [Vedis44](https://github.com/Vedis44)
 
 ---
 

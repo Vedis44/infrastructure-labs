@@ -95,13 +95,13 @@ flowchart LR
 
 Infrastructures are listed in **order of publication**. The catalog grows with each new infrastructure completed and 100% validated.
 
-| # | Infrastructure | Field | Topics covered | Validated on |
-|---|----------------|-------|----------------|--------------|
-| — | *First infrastructure being finalized* | — | — | — |
+| # | Infrastructure | Field | Topics covered | Hypervisor | Validated on |
+|---|----------------|-------|----------------|------------|--------------|
+| — | *First infrastructure being finalized* | — | — | — | — |
 
 <!--
 Row template to copy for each new validated infrastructure:
-| 01 | [Infrastructure name](<./Folder name/>) | Field | Topic 1, topic 2, topic 3 | DD/MM/YYYY |
+| 01 | [Infrastructure name](<./Folder name/>) | Field | Topic 1, topic 2, topic 3 | Hypervisor | DD/MM/YYYY |
 -->
 
 ---
@@ -111,7 +111,7 @@ Row template to copy for each new validated infrastructure:
 Each infrastructure is isolated in its own folder and always follows the same internal structure:
 
 ```
-Infrastructure-labs/
+infrastructure-labs/
 │
 ├── README.md                          ← French version (global overview)
 ├── README_EN.md                       ← This file
@@ -137,7 +137,7 @@ All deployment guides follow the same skeleton, so readers can find their way fr
 2. **Diagram**: complete network topology (machines, interfaces, networks, flows).
 3. **Deployment plan**: the main phases, in order of execution.
 4. **Table of contents**: quick navigation through the guide.
-5. **Prerequisites**: hardware, ISO files, resources and required knowledge.
+5. **Prerequisites**: build environment (host machine, operating system, hypervisor and exact versions), hardware, ISO files and required knowledge.
 6. **Addressing plan**: IP addresses, masks, gateways, DNS, hostnames.
 7. **Deployment steps**: block by block, each step including:
    - the **goal** of the step;
@@ -152,11 +152,22 @@ All deployment guides follow the same skeleton, so readers can find their way fr
 
 ## 🛠️ Technical Environment
 
-Technologies and tools covered across the guides:
+### Host machines
+
+The labs are built on two physical machines, each with its own hypervisors:
+
+| Host machine | Operating system | Hypervisors used |
+|--------------|------------------|------------------|
+| **PC 1** | Windows 11 Pro | VMware Workstation Pro, Hyper-V |
+| **PC 2** | CachyOS (Linux distribution based on Arch Linux) | KVM / QEMU, managed with virt-manager |
+
+> 💡 The hypervisor depends on the infrastructure. Each guide states in its prerequisites the host machine used, the exact software versions and any specific host settings (for example the Hyper-V state on Windows), so that the lab can be reproduced exactly.
+
+### Technologies covered
 
 | Field | Technologies |
 |-------|--------------|
-| **Virtualization** | VMware Workstation, Proxmox VE (VMs and LXC containers) |
+| **Virtualization** | VMware Workstation Pro, Hyper-V, KVM / QEMU (virt-manager), Proxmox VE (VMs and LXC containers) |
 | **Firewall / routing** | OPNsense |
 | **Operating systems** | Windows Server, Windows 10/11, Debian |
 | **Directory & identity** | Active Directory (AD DS), DNS, DHCP, GPO |
@@ -179,10 +190,11 @@ To make reading easier, the guides use common conventions:
 | **Bold** | Interface element (menu, button, tab) |
 | `Menu > Submenu > Option` | Navigation path in a graphical interface |
 | `<VALUE>` | Value to adapt to your environment |
-| `#` at the start of a line | Command run as **root** |
-| `$` at the start of a line | Command run as a standard user |
+| "as root" before a block | The commands in the block run with the **root** account |
 
 Callouts used in the guides:
+
+> 🎯 **Goal**: what the phase achieves.
 
 > 💡 **Tip**: practical advice to save time or understand better.
 
@@ -198,7 +210,7 @@ Callouts used in the guides:
 
 1. **Pick an infrastructure** from the [catalog](#-infrastructure-catalog).
 2. **Read its README** to understand its purpose and topology before starting.
-3. **Check the prerequisites**: host machine resources, ISO files, versions.
+3. **Check the prerequisites**: host machine, hypervisor, ISO files, versions.
 4. **Follow the guide in order**, without skipping any step: each block builds on the previous one.
 5. **Complete every check** before moving on: an uncorrected error carries over to everything that follows.
 6. If you get stuck, see the **Troubleshooting** section at the end of the guide.
@@ -225,8 +237,8 @@ I cannot be held responsible for any misuse of these guides outside a lab contex
 
 Passionate about systems and network administration, I document my labs to consolidate my knowledge and share it.
 
-- 💼 LinkedIn: `<link>`
-- 🐙 GitHub: `<link>`
+- 💼 LinkedIn: `https://www.linkedin.com/in/florian-hebert-89945b424/`
+- 🐙 GitHub: [Vedis44](https://github.com/Vedis44)
 
 ---
 
