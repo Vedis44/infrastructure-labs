@@ -54,13 +54,13 @@ Une infrastructure qui fonctionne une fois ne suffit pas à produire une bonne d
 | **2. Remontage à froid** | Reconstruction complète depuis zéro pour identifier les étapes oubliées, les prérequis implicites et les pièges. |
 | **3. Rédaction** | Écriture du guide bloc par bloc, en testant chaque étape au fur et à mesure de la rédaction. |
 | **4. Validation** | Déploiement intégral en suivant **uniquement** le guide, sans connaissance préalable, pour vérifier qu'il est autosuffisant. |
-| **5. Correction** | Intégration des problèmes rencontrés, des messages d'erreur réels et de leurs solutions dans une section de dépannage. |
+| **5. Correction** | Intégration des problèmes rencontrés directement dans les étapes du guide, sous forme d'avertissements et de vérifications, et dans une section de dépannage lorsque c'est utile. |
 
 Ce processus garantit que chaque guide a été **éprouvé en conditions réelles** : si une étape figure dans un guide, c'est qu'elle a été exécutée et vérifiée.
 
 ### Une infrastructure à la fois, terminée à 100 %
 
-Je ne travaille que sur **une seule infrastructure à la fois**. Elle n'est publiée dans ce dépôt qu'une fois **entièrement terminée et validée** : guide complet, tests réussis, dépannage documenté et traduction anglaise effectuée. Ce dépôt ne contient donc **aucun guide inachevé** : tout ce qui y figure est exploitable de bout en bout.
+Je ne travaille que sur **une seule infrastructure à la fois**. Elle n'est publiée dans ce dépôt qu'une fois **entièrement terminée et validée** : guide complet, tests réussis et traduction anglaise effectuée. Ce dépôt ne contient donc **aucun guide inachevé** : tout ce qui y figure est exploitable de bout en bout.
 
 ---
 
@@ -97,18 +97,18 @@ Les infrastructures sont listées dans leur **ordre de publication**. Le catalog
 
 | # | Infrastructure | Domaine | Thèmes abordés | Hyperviseur | Validée le |
 |---|----------------|---------|----------------|-------------|------------|
-| — | *Première infrastructure en cours de finalisation* | — | — | — | — |
+| 01 | [Segmentation réseau LAN / DMZ avec OPNsense](<./infrastructures/Segmentation réseau LAN-DMZ avec OPNsense/>) | Réseau & sécurité | Pare-feu OPNsense, DMZ, NAT, DHCP, DNS, filtrage | VMware Workstation Pro | 01/10/2026 |
 
 <!--
 Modèle de ligne à copier pour chaque nouvelle infrastructure validée :
-| 01 | [Nom de l'infrastructure](<./Nom du dossier/>) | Domaine | Thème 1, thème 2, thème 3 | Hyperviseur | JJ/MM/AAAA |
+| 02 | [Nom de l'infrastructure](<./infrastructures/Nom du dossier/>) | Domaine | Thème 1, thème 2, thème 3 | Hyperviseur | JJ/MM/AAAA |
 -->
 
 ---
 
 ## 🗂️ Organisation du dépôt
 
-Chaque infrastructure est isolée dans son propre dossier et suit toujours la même structure interne :
+Toutes les infrastructures validées sont regroupées dans le dossier `infrastructures/`. Chacune y dispose de son propre dossier, avec toujours la même structure interne :
 
 ```
 infrastructure-labs/
@@ -117,12 +117,14 @@ infrastructure-labs/
 ├── README_EN.md                       ← Version anglaise
 ├── .gitignore                         ← Fichiers exclus de la publication
 │
-└── Nom de l'infrastructure/
-    ├── README.md                      ← Présentation de l'infrastructure (FR)
-    ├── README_EN.md                   ← Présentation de l'infrastructure (EN)
-    ├── GUIDE_DEPLOIEMENT.md           ← Guide pas à pas complet (FR)
-    ├── GUIDE_DEPLOIEMENT_EN.md        ← Guide pas à pas complet (EN)
-    └── images/                        ← Schémas et captures d'écran
+└── infrastructures/                   ← Toutes les infrastructures validées
+    │
+    └── Nom de l'infrastructure/
+        ├── README.md                  ← Présentation de l'infrastructure (FR)
+        ├── README_EN.md               ← Présentation de l'infrastructure (EN)
+        ├── GUIDE_DEPLOIEMENT.md       ← Guide pas à pas complet (FR)
+        ├── GUIDE_DEPLOIEMENT_EN.md    ← Guide pas à pas complet (EN)
+        └── images/                    ← Schémas et captures d'écran
 ```
 
 > Chaque nouvelle infrastructure ajoutée au dépôt reprend exactement cette structure.
@@ -145,7 +147,7 @@ Tous les guides de déploiement respectent le même squelette, pour qu'un lecteu
    - l'**explication** de ce qui est fait et pourquoi ;
    - la **vérification** permettant de confirmer que l'étape a réussi.
 8. **Tests de validation finale** : scénarios prouvant que l'infrastructure fonctionne dans son ensemble.
-9. **Dépannage** : erreurs rencontrées, causes et solutions.
+9. **Dépannage** *(facultatif)* : présent uniquement lorsqu'une infrastructure comporte des problèmes récurrents qui méritent d'être documentés (erreurs, causes et solutions).
 10. **Glossaire** : définition des termes techniques utilisés.
 
 ---
@@ -213,7 +215,7 @@ Encadrés utilisés dans les guides :
 3. **Vérifie les prérequis** : machine hôte, hyperviseur, ISO, versions.
 4. **Suis le guide dans l'ordre**, sans sauter d'étape : chaque bloc s'appuie sur le précédent.
 5. **Valide chaque vérification** avant de continuer : une erreur non corrigée se répercute sur toute la suite.
-6. En cas de blocage, consulte la section **Dépannage** en fin de guide.
+6. En cas de blocage, relis les encadrés ⚠️ **Attention** de l'étape concernée et, s'il existe, la section **Dépannage** en fin de guide.
 
 > 💡 Prends le temps de lire les explications, pas seulement les commandes. L'objectif est de comprendre l'infrastructure, pas seulement de la faire fonctionner.
 
@@ -237,7 +239,7 @@ Je ne pourrai être tenu responsable d'une mauvaise utilisation de ces guides ho
 
 Passionné par l'administration systèmes et réseaux, je documente mes labs pour ancrer mes connaissances et les partager.
 
-- 💼 LinkedIn : `https://www.linkedin.com/in/florian-hebert-89945b424/`
+- 💼 LinkedIn : `<lien>`
 - 🐙 GitHub : [Vedis44](https://github.com/Vedis44)
 
 ---

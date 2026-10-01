@@ -54,13 +54,13 @@ An infrastructure that works once is not enough to produce good documentation. E
 | **2. Cold rebuild** | Full rebuild from scratch to identify forgotten steps, implicit prerequisites and pitfalls. |
 | **3. Writing** | Writing the guide block by block, testing each step as it is written. |
 | **4. Validation** | Full deployment following **only** the guide, with no prior knowledge, to make sure it is self-sufficient. |
-| **5. Correction** | Adding the issues encountered, the actual error messages and their solutions to a troubleshooting section. |
+| **5. Correction** | Adding the issues encountered directly into the guide's steps, as warnings and checks, and into a troubleshooting section when useful. |
 
 This process ensures that every guide has been **tested under real conditions**: if a step appears in a guide, it has been executed and verified.
 
 ### One infrastructure at a time, 100% complete
 
-I work on **only one infrastructure at a time**. It is published in this repository only once it is **fully completed and validated**: complete guide, successful tests, documented troubleshooting and English translation done. This repository therefore contains **no unfinished guide**: everything in it can be used from start to finish.
+I work on **only one infrastructure at a time**. It is published in this repository only once it is **fully completed and validated**: complete guide, successful tests and English translation done. This repository therefore contains **no unfinished guide**: everything in it can be used from start to finish.
 
 ---
 
@@ -97,18 +97,18 @@ Infrastructures are listed in **order of publication**. The catalog grows with e
 
 | # | Infrastructure | Field | Topics covered | Hypervisor | Validated on |
 |---|----------------|-------|----------------|------------|--------------|
-| — | *First infrastructure being finalized* | — | — | — | — |
+| 01 | [LAN / DMZ Network Segmentation with OPNsense](<./infrastructures/Segmentation réseau LAN-DMZ avec OPNsense/README_EN.md>) | Networking & security | OPNsense firewall, DMZ, NAT, DHCP, DNS, filtering | VMware Workstation Pro | 01/10/2026 |
 
 <!--
 Row template to copy for each new validated infrastructure:
-| 01 | [Infrastructure name](<./Folder name/>) | Field | Topic 1, topic 2, topic 3 | Hypervisor | DD/MM/YYYY |
+| 02 | [Infrastructure name](<./infrastructures/Folder name/>) | Field | Topic 1, topic 2, topic 3 | Hypervisor | DD/MM/YYYY |
 -->
 
 ---
 
 ## 🗂️ Repository Structure
 
-Each infrastructure is isolated in its own folder and always follows the same internal structure:
+All validated infrastructures are grouped in the `infrastructures/` folder. Each one has its own folder there, always with the same internal structure:
 
 ```
 infrastructure-labs/
@@ -117,12 +117,14 @@ infrastructure-labs/
 ├── README_EN.md                       ← This file
 ├── .gitignore                         ← Files excluded from publication
 │
-└── Infrastructure name/
-    ├── README.md                      ← Infrastructure overview (FR)
-    ├── README_EN.md                   ← Infrastructure overview (EN)
-    ├── GUIDE_DEPLOIEMENT.md           ← Complete step-by-step guide (FR)
-    ├── GUIDE_DEPLOIEMENT_EN.md        ← Complete step-by-step guide (EN)
-    └── images/                        ← Diagrams and screenshots
+└── infrastructures/                   ← All validated infrastructures
+    │
+    └── Infrastructure name/
+        ├── README.md                  ← Infrastructure overview (FR)
+        ├── README_EN.md               ← Infrastructure overview (EN)
+        ├── GUIDE_DEPLOIEMENT.md       ← Complete step-by-step guide (FR)
+        ├── GUIDE_DEPLOIEMENT_EN.md    ← Complete step-by-step guide (EN)
+        └── images/                    ← Diagrams and screenshots
 ```
 
 > Every new infrastructure added to the repository follows exactly this structure.
@@ -145,7 +147,7 @@ All deployment guides follow the same skeleton, so readers can find their way fr
    - an **explanation** of what is done and why;
    - the **check** that confirms the step succeeded.
 8. **Final validation tests**: scenarios proving the infrastructure works as a whole.
-9. **Troubleshooting**: errors encountered, causes and solutions.
+9. **Troubleshooting** *(optional)*: included only when an infrastructure has recurring issues worth documenting (errors, causes and solutions).
 10. **Glossary**: definitions of the technical terms used.
 
 ---
@@ -213,7 +215,7 @@ Callouts used in the guides:
 3. **Check the prerequisites**: host machine, hypervisor, ISO files, versions.
 4. **Follow the guide in order**, without skipping any step: each block builds on the previous one.
 5. **Complete every check** before moving on: an uncorrected error carries over to everything that follows.
-6. If you get stuck, see the **Troubleshooting** section at the end of the guide.
+6. If you get stuck, reread the ⚠️ **Warning** callouts of the step in question and, if there is one, the **Troubleshooting** section at the end of the guide.
 
 > 💡 Take the time to read the explanations, not just the commands. The goal is to understand the infrastructure, not just to make it work.
 
@@ -237,7 +239,7 @@ I cannot be held responsible for any misuse of these guides outside a lab contex
 
 Passionate about systems and network administration, I document my labs to consolidate my knowledge and share it.
 
-- 💼 LinkedIn: `https://www.linkedin.com/in/florian-hebert-89945b424/`
+- 💼 LinkedIn: `<link>`
 - 🐙 GitHub: [Vedis44](https://github.com/Vedis44)
 
 ---
