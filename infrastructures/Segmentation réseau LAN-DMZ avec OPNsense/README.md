@@ -140,7 +140,7 @@ L'ensemble de la construction est détaillé pas à pas dans le guide, en 7 phas
 6. Règles de pare-feu et redirection de port (NAT)
 7. Tests de validation finale
 
-Chaque étape est accompagnée de captures d'écran, de définitions et de vérifications, avec une phase finale de tests qui prouve chaque flux.
+Chaque étape est accompagnée de captures d'écran, de définitions et de vérifications, avec une phase finale de tests qui prouve chaque flux. Le guide se termine par les [limites du lab et les pistes d'amélioration](./GUIDE_DEPLOIEMENT.md#-limites-et-pistes-damélioration) à prévoir avant un passage en production.
 
 👉 **[Consulter le guide de déploiement complet](./GUIDE_DEPLOIEMENT.md)**
 

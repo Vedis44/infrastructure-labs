@@ -140,7 +140,7 @@ The entire build is detailed step by step in the guide, in 7 phases:
 6. Firewall rules and port forwarding (NAT)
 7. Final validation tests
 
-Each step comes with screenshots, definitions and checks, with a final testing phase that proves every flow.
+Each step comes with screenshots, definitions and checks, with a final testing phase that proves every flow. The guide ends with the [lab's limitations and possible improvements](./GUIDE_DEPLOIEMENT_EN.md#-limitations-and-possible-improvements) to address before moving to production.
 
 👉 **[Read the complete deployment guide](./GUIDE_DEPLOIEMENT_EN.md)**
 

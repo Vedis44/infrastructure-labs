@@ -140,7 +140,8 @@ Les phases s'enchaînent dans cet ordre : chacune s'appuie sur la précédente. 
 10. [Phase 5 : Déploiement du serveur Web Debian 13](#-phase-5--déploiement-du-serveur-web-debian-13)
 11. [Phase 6 : Règles de pare-feu et redirection de port (NAT)](#-phase-6--règles-de-pare-feu-et-redirection-de-port-nat)
 12. [Phase 7 : Tests de validation finale](#-phase-7--tests-de-validation-finale)
-13. [Glossaire](#-glossaire)
+13. [Limites et pistes d'amélioration](#-limites-et-pistes-damélioration)
+14. [Glossaire](#-glossaire)
 
 ---
 
@@ -1386,6 +1387,25 @@ Par défaut, l'interface d'administration d'OPNsense écoute sur **toutes** les 
 **🔗 Pour aller plus loin :**
 
 - [OPNsense — Journaux du pare-feu (Live View)](https://docs.opnsense.org/manual/logging_firewall.html)
+
+---
+
+## 🔭 Limites et pistes d'amélioration
+
+Ce lab privilégie la clarté pédagogique : certains choix sont volontairement simplifiés pour se concentrer sur la segmentation et le filtrage. Voici ce qu'il faudrait renforcer avant de transposer cette architecture en production.
+
+| Limite du lab | Risque | Ce qu'on ferait en production |
+|---------------|--------|-------------------------------|
+| La règle `Accès Internet DMZ` autorise **toutes** les destinations et tous les protocoles | Un serveur compromis peut joindre n'importe quel service sur Internet (exfiltration de données, communication avec un serveur de commande) | Appliquer le **principe du moindre privilège** : n'autoriser que HTTP/HTTPS (mises à jour), DNS et NTP, vers des destinations identifiées |
+| Le site est publié en **HTTP** | Les échanges entre les visiteurs et le serveur circulent en clair | Publier le site en **HTTPS**, avec un certificat délivré par une autorité reconnue (Let's Encrypt, par exemple) |
+| **Block private networks** et **Block bogon networks** sont décochés sur le WAN | Le pare-feu accepte des paquets provenant d'adresses qui ne devraient jamais arriver d'Internet | Laisser ces deux options **cochées** sur un vrai WAN relié à Internet |
+| L'interface d'administration est utilisée avec le compte **root** | Un compte générique ne permet pas de savoir qui a fait quoi, et sa compromission donne un accès total | Créer des **comptes nominatifs** pour chaque administrateur, activer l'**authentification à deux facteurs** et réserver root aux situations d'urgence |
+| Tout le LAN peut joindre le serveur en **SSH** et l'interface d'administration du pare-feu | Un poste utilisateur compromis peut tenter de se connecter aux outils d'administration | Restreindre l'administration à un **réseau ou un poste d'administration dédié** |
+| Aucune **sauvegarde** de la configuration d'OPNsense | Une erreur de manipulation ou une panne oblige à tout reconfigurer à la main | Exporter la configuration après chaque modification (**System > Configuration > Backups**) et la conserver hors du pare-feu |
+| Aucune **détection d'intrusion** | Une attaque contre le serveur Web publié passe inaperçue | Activer le module de détection et de prévention d'intrusion d'OPNsense (**Services > Intrusion Detection**, basé sur Suricata) |
+| Le client utilise **Windows 10**, qui n'est plus maintenu | Les failles découvertes ne sont plus corrigées | Utiliser un système d'exploitation maintenu, comme Windows 11 |
+
+> 💡 **Astuce** : chacune de ces pistes peut faire l'objet d'un lab à part entière, en repartant du snapshot `Lab-valide` de cette infrastructure.
 
 ---
 

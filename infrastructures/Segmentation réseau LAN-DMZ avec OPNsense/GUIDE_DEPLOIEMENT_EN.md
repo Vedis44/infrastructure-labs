@@ -142,7 +142,8 @@ The phases follow this order: each one builds on the previous one. Durations are
 10. [Phase 5: Debian 13 Web Server Deployment](#-phase-5-debian-13-web-server-deployment)
 11. [Phase 6: Firewall Rules and Port Forwarding (NAT)](#-phase-6-firewall-rules-and-port-forwarding-nat)
 12. [Phase 7: Final Validation Tests](#-phase-7-final-validation-tests)
-13. [Glossary](#-glossary)
+13. [Limitations and Possible Improvements](#-limitations-and-possible-improvements)
+14. [Glossary](#-glossary)
 
 ---
 
@@ -1390,6 +1391,25 @@ By default, the OPNsense administration interface listens on **all** the firewal
 **🔗 Further reading:**
 
 - [OPNsense — Firewall logs (Live View)](https://docs.opnsense.org/manual/logging_firewall.html)
+
+---
+
+## 🔭 Limitations and Possible Improvements
+
+This lab favors educational clarity: some choices are deliberately simplified to focus on segmentation and filtering. Here is what should be strengthened before moving this architecture to production.
+
+| Lab limitation | Risk | What you would do in production |
+|----------------|------|---------------------------------|
+| The `Accès Internet DMZ` rule allows **all** destinations and protocols | A compromised server can reach any service on the Internet (data exfiltration, communication with a command-and-control server) | Apply the **principle of least privilege**: only allow HTTP/HTTPS (updates), DNS and NTP, to identified destinations |
+| The website is published over **HTTP** | Exchanges between visitors and the server travel in clear text | Publish the website over **HTTPS**, with a certificate issued by a trusted authority (Let's Encrypt, for example) |
+| **Block private networks** and **Block bogon networks** are unchecked on the WAN | The firewall accepts packets from addresses that should never come from the Internet | Keep both options **checked** on a real WAN connected to the Internet |
+| The administration interface is used with the **root** account | A generic account does not show who did what, and its compromise gives full access | Create **named accounts** for each administrator, enable **two-factor authentication** and keep root for emergencies |
+| The whole LAN can reach the server over **SSH** and the firewall's administration interface | A compromised user workstation can try to connect to administration tools | Restrict administration to a **dedicated administration network or workstation** |
+| No **backup** of the OPNsense configuration | A mistake or a failure means reconfiguring everything by hand | Export the configuration after each change (**System > Configuration > Backups**) and store it outside the firewall |
+| No **intrusion detection** | An attack against the published Web server goes unnoticed | Enable OPNsense's intrusion detection and prevention module (**Services > Intrusion Detection**, based on Suricata) |
+| The client runs **Windows 10**, which is no longer supported | Newly discovered vulnerabilities are no longer fixed | Use a supported operating system, such as Windows 11 |
+
+> 💡 **Tip**: each of these improvements can become a lab of its own, starting from this infrastructure's `Lab-validated` snapshot.
 
 ---
 
