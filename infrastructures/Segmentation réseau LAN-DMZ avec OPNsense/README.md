@@ -2,148 +2,248 @@
   🇫🇷 <b>Français</b> · 🇬🇧 <a href="./README_EN.md">English</a>
 </p>
 
-# 🛡️ Segmentation réseau LAN / DMZ avec OPNsense
+# 🖧 Infrastructure Labs — Guides de déploiement documentés
 
-> Infrastructure virtualisée sous VMware Workstation dans laquelle un pare-feu **OPNsense** sépare un réseau interne (LAN) d'une zone démilitarisée (DMZ) qui publie un serveur Web vers l'extérieur, tout en protégeant le réseau interne et le pare-feu lui-même.
+> Recueil de guides de déploiement pas à pas, issus des infrastructures montées pendant ma formation en systèmes et réseaux, puis approfondies au-delà.
+> Chaque lab a été monté, cassé, remonté et documenté plusieurs fois pour aboutir à un guide complet, précis et reproductible.
 
-![Pare-feu](https://img.shields.io/badge/Pare--feu-OPNsense%2026.7-orange)
-![Hyperviseur](https://img.shields.io/badge/Hyperviseur-VMware%20Workstation%20Pro-blue)
-![Serveur](https://img.shields.io/badge/Serveur-Debian%2013%20%2B%20Nginx-red)
-![Client](https://img.shields.io/badge/Client-Windows%2010%20Pro-0078D6)
-![Tests](https://img.shields.io/badge/Tests-8%2F8%20valid%C3%A9s-brightgreen)
-
-[🏠 Retour au dépôt](../../README.md) · [📘 Guide de déploiement](./GUIDE_DEPLOIEMENT.md)
+![Domaine](https://img.shields.io/badge/Domaine-Syst%C3%A8mes%20%26%20R%C3%A9seaux-blue)
+![Langues](https://img.shields.io/badge/Langues-FR%20%7C%20EN-green)
+![Statut](https://img.shields.io/badge/Statut-En%20construction-orange)
+![Documentation](https://img.shields.io/badge/Docs-Markdown-lightgrey)
 
 ---
 
-## 🎯 Objectif
+## 📑 Sommaire
 
-Toute entreprise qui publie un service sur Internet fait face au même risque : si ce service est compromis, l'attaquant ne doit pas pouvoir rebondir vers le réseau interne, où se trouvent les postes de travail et les données sensibles.
-
-Ce lab reproduit cette situation. Le réseau est découpé en trois zones de confiance, toutes contrôlées par un pare-feu central :
-
-| Zone | Rôle | Niveau de confiance |
-|------|------|---------------------|
-| **WAN** | Accès Internet, simulé par le NAT de VMware | Aucun |
-| **DMZ** | Héberge le serveur Web exposé | Faible |
-| **LAN** | Réseau interne des utilisateurs et de l'administration | Élevé |
-
-![Site de la DMZ affiché depuis l'extérieur via l'adresse WAN du pare-feu](./images/07-07-site-web-via-nat.png)
-
-*Résultat final : le serveur Web de la DMZ est publié sur l'adresse WAN du pare-feu.*
+1. [Présentation du projet](#-présentation-du-projet)
+2. [La démarche : pourquoi ces labs ont été montés plusieurs fois](#-la-démarche--pourquoi-ces-labs-ont-été-montés-plusieurs-fois)
+3. [Documentation assistée par IA : ma méthode de travail](#-documentation-assistée-par-ia--ma-méthode-de-travail)
+4. [Catalogue des infrastructures](#-catalogue-des-infrastructures)
+5. [Organisation du dépôt](#%EF%B8%8F-organisation-du-dépôt)
+6. [Structure type d'un guide](#-structure-type-dun-guide)
+7. [Environnement technique](#%EF%B8%8F-environnement-technique)
+8. [Conventions de rédaction](#%EF%B8%8F-conventions-de-rédaction)
+9. [Comment utiliser ces guides](#-comment-utiliser-ces-guides)
+10. [Avertissement](#%EF%B8%8F-avertissement)
+11. [Auteur](#-auteur)
 
 ---
 
-## 📐 Architecture
+## 🎯 Présentation du projet
+
+Ce dépôt regroupe l'ensemble des **infrastructures systèmes et réseaux** que j'ai conçues et déployées en environnement de laboratoire. Chaque infrastructure dispose de son propre dossier, contenant un guide de déploiement complet ainsi qu'un README de présentation, disponibles en **français** et en **anglais**.
+
+L'objectif est triple :
+
+- **Consolider mes compétences** : réexpliquer chaque configuration m'oblige à en comprendre chaque paramètre, et pas seulement à savoir les appliquer.
+- **Constituer une base de référence** : disposer de procédures fiables, réutilisables en entreprise ou en lab personnel.
+- **Partager** : proposer à d'autres apprenants et techniciens des guides clairs, où chaque étape est expliquée et justifiée.
+
+Ces guides ne se limitent pas à une suite de commandes : ils expliquent **le pourquoi** de chaque choix technique, définissent les notions abordées et décrivent comment vérifier que chaque étape a bien fonctionné.
+
+---
+
+## 🔁 La démarche : pourquoi ces labs ont été montés plusieurs fois
+
+Une infrastructure qui fonctionne une fois ne suffit pas à produire une bonne documentation. Chaque lab présenté ici est passé par plusieurs cycles :
+
+| Cycle | Objectif |
+|-------|----------|
+| **1. Premier montage** | Déploiement initial, découverte des technologies et des contraintes. |
+| **2. Remontage à froid** | Reconstruction complète depuis zéro pour identifier les étapes oubliées, les prérequis implicites et les pièges. |
+| **3. Rédaction** | Écriture du guide bloc par bloc, en testant chaque étape au fur et à mesure de la rédaction. |
+| **4. Validation** | Déploiement intégral en suivant **uniquement** le guide, sans connaissance préalable, pour vérifier qu'il est autosuffisant. |
+| **5. Correction** | Intégration des problèmes rencontrés directement dans les étapes du guide, sous forme d'avertissements et de vérifications, et dans une section de dépannage lorsque c'est utile. |
+
+Ce processus garantit que chaque guide a été **éprouvé en conditions réelles** : si une étape figure dans un guide, c'est qu'elle a été exécutée et vérifiée.
+
+### Une infrastructure à la fois, terminée à 100 %
+
+Je ne travaille que sur **une seule infrastructure à la fois**. Elle n'est publiée dans ce dépôt qu'une fois **entièrement terminée et validée** : guide complet, tests réussis et traduction anglaise effectuée. Ce dépôt ne contient donc **aucun guide inachevé** : tout ce qui y figure est exploitable de bout en bout.
+
+---
+
+## 🤖 Documentation assistée par IA : ma méthode de travail
+
+Par souci de transparence : ces guides ont été **rédigés avec l'assistance d'une intelligence artificielle**. L'IA m'a servi d'outil de structuration et de rédaction, au même titre qu'une documentation officielle ou qu'un forum technique.
+
+En revanche, **rien n'a été publié sans vérification**. Mon travail sur chaque guide consiste à :
+
+- ✅ **Tester chaque commande et chaque configuration** sur mon propre lab avant de la valider.
+- ✅ **Corriger les erreurs** : versions obsolètes, chemins de menus modifiés, paramètres inadaptés au contexte.
+- ✅ **Vérifier la cohérence globale** : plan d'adressage, noms de machines, interfaces et règles de filtrage doivent concorder d'un bout à l'autre du guide.
+- ✅ **Étudier et comprendre** chaque étape, pour être capable de l'expliquer et de la défendre sans support.
+- ✅ **Enrichir les explications** : ajout de définitions, de schémas, de justifications techniques et de points d'attention issus de ma propre expérience.
 
 ```mermaid
-flowchart TD
-    classDef greyNode fill:#555,stroke:#fff,stroke-width:1px,color:#fff;
-    classDef darkNode fill:#222,stroke:#fff,stroke-width:1px,color:#fff;
-
-    Internet((Internet)):::darkNode
-    NAT["Machine hôte<br/>NAT VMware — VMnet8"]:::greyNode
-    FW["Pare-feu OPNsense<br/>WAN em0 : DHCP"]:::darkNode
-
-    subgraph DMZ["DMZ — VMnet11 — 192.168.20.0/24"]
-        Web["Serveur Web Debian 13<br/>Nginx — 192.168.20.10"]:::darkNode
-    end
-
-    subgraph LAN["LAN — VMnet10 — 192.168.10.0/24"]
-        Client["Client Windows 10<br/>DHCP : 192.168.10.100 à .150"]:::darkNode
-    end
-
-    Internet --- NAT
-    NAT --- FW
-    FW -- "em2 / OPT1 — 192.168.20.1" --- Web
-    FW -- "em1 / LAN — 192.168.10.1" --- Client
+flowchart LR
+    A[Montage du lab] --> B[Rédaction assistée par IA]
+    B --> C[Test bloc par bloc]
+    C -->|Erreur| D[Correction et explication]
+    D --> C
+    C -->|Validé| E[Relecture et vérification de cohérence]
+    E --> F[Traduction FR / EN]
+    F --> G[Publication GitHub]
 ```
 
-### Matrice des flux
-
-| Source | Destination | Autorisé | Mise en œuvre |
-|--------|-------------|:--------:|---------------|
-| LAN | Internet | ✅ | Règle LAN par défaut d'OPNsense |
-| LAN | DMZ | ✅ | Règle LAN par défaut d'OPNsense |
-| DMZ | Internet | ✅ | Règle *Pass* sur l'interface OPT1 |
-| DMZ | LAN | ❌ | Règle *Block* sur l'interface OPT1, journalisée |
-| DMZ | Pare-feu (WebGUI et services) | ❌ | Règle *Block* sur l'interface OPT1, journalisée |
-| WAN | Serveur Web (port 80) | ✅ | Redirection de port (*Destination NAT*) |
-| WAN | Toute autre destination, dont la WebGUI | ❌ | Blocage par défaut d'OPNsense |
+> 💡 **En résumé :** l'IA m'a aidé à rédiger, mais la compréhension, les tests, les corrections et la validation sont les miens. Ce n'est pas du copier-coller : c'est une documentation construite, éprouvée et maîtrisée.
 
 ---
 
-## 🛠️ Ce que ce lab met en pratique
+## 📚 Catalogue des infrastructures
 
-| Concept | Mise en œuvre |
+Les infrastructures sont listées dans leur **ordre de publication**. Le catalogue s'enrichit à chaque nouvelle infrastructure terminée et validée à 100 %.
+
+| # | Infrastructure | Domaine | Thèmes abordés | Hyperviseur | Validée le |
+|---|----------------|---------|----------------|-------------|------------|
+| 01 | [Segmentation réseau LAN / DMZ avec OPNsense](<./infrastructures/Segmentation réseau LAN-DMZ avec OPNsense/>) | Réseau & sécurité | Pare-feu OPNsense, DMZ, NAT, DHCP, DNS, filtrage | VMware Workstation Pro | 01/10/2026 |
+
+<!--
+Modèle de ligne à copier pour chaque nouvelle infrastructure validée :
+| 02 | [Nom de l'infrastructure](<./infrastructures/Nom du dossier/>) | Domaine | Thème 1, thème 2, thème 3 | Hyperviseur | JJ/MM/AAAA |
+-->
+
+---
+
+## 🗂️ Organisation du dépôt
+
+Toutes les infrastructures validées sont regroupées dans le dossier `infrastructures/`. Chacune y dispose de son propre dossier, avec toujours la même structure interne :
+
+```
+infrastructure-labs/
+│
+├── README.md                          ← Ce fichier (présentation globale)
+├── README_EN.md                       ← Version anglaise
+├── .gitignore                         ← Fichiers exclus de la publication
+│
+└── infrastructures/                   ← Toutes les infrastructures validées
+    │
+    └── Nom de l'infrastructure/
+        ├── README.md                  ← Présentation de l'infrastructure (FR)
+        ├── README_EN.md               ← Présentation de l'infrastructure (EN)
+        ├── GUIDE_DEPLOIEMENT.md       ← Guide pas à pas complet (FR)
+        ├── GUIDE_DEPLOIEMENT_EN.md    ← Guide pas à pas complet (EN)
+        └── images/                    ← Schémas et captures d'écran
+```
+
+> Chaque nouvelle infrastructure ajoutée au dépôt reprend exactement cette structure.
+
+---
+
+## 🧱 Structure type d'un guide
+
+Tous les guides de déploiement respectent le même squelette, pour qu'un lecteur retrouve ses repères d'un lab à l'autre :
+
+1. **Titre et utilité** : ce que fait l'infrastructure et à quel besoin réel elle répond.
+2. **Schéma** : topologie réseau complète (machines, interfaces, réseaux, flux).
+3. **Plan de déploiement** : les grandes phases, dans l'ordre d'exécution.
+4. **Sommaire** : navigation rapide dans le guide.
+5. **Prérequis** : environnement de réalisation (machine hôte, système, hyperviseur et versions exactes), matériel, ISO et connaissances nécessaires.
+6. **Plan d'adressage** : IP, masques, passerelles, DNS, noms d'hôtes.
+7. **Étapes de déploiement** : bloc par bloc, chaque étape accompagnée de :
+   - l'**objectif** de l'étape ;
+   - les **actions** à réaliser (commandes ou manipulations graphiques) ;
+   - l'**explication** de ce qui est fait et pourquoi ;
+   - la **vérification** permettant de confirmer que l'étape a réussi.
+8. **Tests de validation finale** : scénarios prouvant que l'infrastructure fonctionne dans son ensemble.
+9. **Dépannage** *(facultatif)* : présent uniquement lorsqu'une infrastructure comporte des problèmes récurrents qui méritent d'être documentés (erreurs, causes et solutions).
+10. **Glossaire** : définition des termes techniques utilisés.
+
+---
+
+## 🛠️ Environnement technique
+
+### Machines hôtes
+
+Les labs sont réalisés sur deux machines physiques, chacune avec ses propres hyperviseurs :
+
+| Machine hôte | Système | Hyperviseurs utilisés |
+|--------------|---------|-----------------------|
+| **PC 1** | Windows 11 Pro | VMware Workstation Pro, Hyper-V |
+| **PC 2** | CachyOS (distribution Linux basée sur Arch Linux) | KVM / QEMU, administré avec virt-manager |
+
+> 💡 Le choix de l'hyperviseur dépend de l'infrastructure. Chaque guide précise dans ses prérequis la machine hôte utilisée, les versions exactes des logiciels et les réglages particuliers de l'hôte (par exemple l'état de Hyper-V sous Windows), pour que le lab soit reproductible à l'identique.
+
+### Technologies couvertes
+
+| Domaine | Technologies |
+|---------|--------------|
+| **Virtualisation** | VMware Workstation Pro, Hyper-V, KVM / QEMU (virt-manager), Proxmox VE (VM et conteneurs LXC) |
+| **Pare-feu / routage** | OPNsense |
+| **Systèmes** | Windows Server, Windows 10/11, Debian |
+| **Annuaire & identité** | Active Directory (AD DS), DNS, DHCP, GPO |
+| **Services** | Serveur de fichiers, proxy Squid, GLPI |
+| **Réseau** | VLAN, routage, NAT, DMZ, filtrage |
+| **Disponibilité** | Redondance, répartition de charge |
+| **Supervision** | Monitoring des hôtes et services, alertes |
+
+> Chaque guide précise les **versions exactes** utilisées lors de sa validation. Des écarts de version peuvent entraîner des différences d'interface ou de syntaxe.
+
+---
+
+## ✍️ Conventions de rédaction
+
+Pour faciliter la lecture, les guides utilisent des conventions communes :
+
+| Élément | Signification |
 |---------|---------------|
-| **Segmentation réseau** | Un commutateur virtuel isolé par zone (`VMnet10` pour le LAN, `VMnet11` pour la DMZ), sans DHCP VMware ni adaptateur hôte, pour que tout le trafic inter-zones passe par OPNsense. |
-| **Isolation de la DMZ** | La DMZ ne peut initier aucune connexion vers le LAN : une compromission du serveur Web ne donne pas accès au réseau interne. |
-| **Protection du pare-feu** | La DMZ ne peut pas atteindre les services du pare-feu, dont son interface d'administration. |
-| **Filtrage par défaut restrictif** | Tout flux non explicitement autorisé est bloqué (*deny by default*), avec une évaluation des règles en *first match*. |
-| **Redirection de port (NAT)** | Le trafic HTTP arrivant sur l'adresse WAN est redirigé vers le serveur Web (`192.168.20.10`), avec une règle de filtrage enregistrée automatiquement. |
-| **Services réseau centralisés** | Serveur DHCP Dnsmasq sur le LAN et résolveur DNS Unbound fournis par OPNsense. |
-| **Journalisation et validation** | Blocages journalisés et vérifiés dans **Live View**, et 8 tests qui prouvent chaque flux de la matrice. |
+| `commande` | Commande à saisir dans un terminal |
+| **Gras** | Élément d'interface (menu, bouton, onglet) |
+| `Menu > Sous-menu > Option` | Chemin de navigation dans une interface graphique |
+| `<VALEUR>` | Valeur à adapter à votre environnement |
+| « en root » avant un bloc | Les commandes du bloc s'exécutent avec le compte **root** |
+
+Encadrés utilisés dans les guides :
+
+> 🎯 **Objectif** : ce que la phase permet d'accomplir.
+
+> 💡 **Astuce** : conseil pratique pour gagner du temps ou mieux comprendre.
+
+> ⚠️ **Attention** : point critique, source d'erreur fréquente.
+
+> 📖 **Définition** : explication d'une notion technique.
+
+> ✅ **Vérification** : contrôle à effectuer avant de passer à l'étape suivante.
 
 ---
 
-## 📊 Dimensionnement et adressage
+## 🚀 Comment utiliser ces guides
 
-| Machine virtuelle | Système | Processeurs | RAM | Disque | Réseau | Adresse IP |
-|-------------------|---------|:-----------:|:---:|:------:|--------|------------|
-| **OPNsense-Firewall** | OPNsense 26.7 | 1 × 1 cœur | 2 Go | 20 Go | VMnet8 (WAN)<br>VMnet10 (LAN)<br>VMnet11 (DMZ) | DHCP<br>`192.168.10.1/24`<br>`192.168.20.1/24` |
-| **Serveur-Web-Debian** | Debian 13 | 1 × 1 cœur | 2 Go | 25 Go | VMnet11 (DMZ) | `192.168.20.10/24` (statique) |
-| **Client-Windows10** | Windows 10 Pro | 1 × 4 cœurs | 6 Go | 60 Go | VMnet10 (LAN) | DHCP (`192.168.10.100` à `.150`) |
+1. **Choisissez une infrastructure** dans le [catalogue](#-catalogue-des-infrastructures).
+2. **Lisez son README** pour comprendre son utilité et sa topologie avant de commencer.
+3. **Vérifiez les prérequis** : machine hôte, hyperviseur, ISO, versions.
+4. **Suivez le guide dans l'ordre**, sans sauter d'étape : chaque bloc s'appuie sur le précédent.
+5. **Validez chaque vérification** avant de continuer : une erreur non corrigée se répercute sur toute la suite.
+6. En cas de blocage, relisez les encadrés ⚠️ **Attention** de l'étape concernée et, s'il existe, la section **Dépannage** en fin de guide.
 
----
-
-## 🖥️ Environnement de réalisation
-
-| Élément | Version |
-|---------|---------|
-| **Machine hôte** | Windows 11 Pro 26H2, Hyper-V désactivé |
-| **Hyperviseur** | VMware Workstation Pro 17.6.1 |
-| **Pare-feu** | OPNsense 26.7 (FreeBSD 15.1) |
-| **Serveur** | Debian 13.6 avec Nginx |
-| **Client** | Windows 10 Pro 22H2 |
-
-Les versions exactes et la configuration matérielle requise sont détaillées dans les [prérequis du guide](./GUIDE_DEPLOIEMENT.md#-prérequis).
+> 💡 Prenez le temps de lire les explications, pas seulement les commandes. L'objectif est de comprendre l'infrastructure, pas seulement de la faire fonctionner.
 
 ---
 
-## ✅ Validation
+## ⚠️ Avertissement
 
-L'infrastructure est validée par 8 tests, chacun associé à un flux de la matrice :
+Ces infrastructures ont été conçues **à des fins pédagogiques**, en environnement de laboratoire isolé.
 
-| # | Test | Résultat attendu |
-|:-:|------|------------------|
-| 1 | Accès Internet du LAN | ✅ Autorisé |
-| 2 | Accès du LAN vers la DMZ | ✅ Autorisé |
-| 3 | Accès Internet de la DMZ | ✅ Autorisé |
-| 4 | DMZ vers LAN | ❌ Bloqué |
-| 5 | DMZ vers l'interface d'administration du pare-feu | ❌ Bloqué |
-| 6 | Journalisation des blocages dans **Live View** | ✅ Visible |
-| 7 | Publication du site via le NAT | ✅ Autorisé |
-| 8 | Interface d'administration depuis le WAN | ❌ Bloqué |
+- Les mots de passe, adresses IP et noms de domaine utilisés sont **fictifs** ou propres au lab.
+- Les configurations privilégient la **clarté pédagogique** : certaines mesures de durcissement nécessaires en production peuvent être simplifiées ou absentes.
+- Avant toute transposition en environnement de production, une **analyse de sécurité** et une adaptation au contexte sont indispensables.
+
+Je ne pourrai être tenu responsable d'une mauvaise utilisation de ces guides hors d'un cadre de laboratoire.
 
 ---
 
-## 🚀 Déploiement
+## 👤 Auteur
 
-L'ensemble de la construction est détaillé pas à pas dans le guide, en 7 phases :
+**Vedis** — Administrateur systèmes et réseaux en formation
 
-1. Préparation des réseaux virtuels
-2. Création des machines virtuelles
-3. Installation et configuration initiale d'OPNsense
-4. Déploiement du client Windows 10 et accès à la WebGUI
-5. Déploiement du serveur Web Debian 13
-6. Règles de pare-feu et redirection de port (NAT)
-7. Tests de validation finale
+Passionné par l'administration systèmes et réseaux, je documente mes labs pour ancrer mes connaissances et les partager.
 
-Chaque étape est accompagnée de captures d'écran, de définitions et de vérifications, avec une phase finale de tests qui prouve chaque flux. Le guide se termine par les [limites du lab et les pistes d'amélioration](./GUIDE_DEPLOIEMENT.md#-limites-et-pistes-damélioration) à prévoir avant un passage en production.
-
-👉 **[Consulter le guide de déploiement complet](./GUIDE_DEPLOIEMENT.md)**
+- 💼 LinkedIn : `<lien>`
+- 🐙 GitHub : [Vedis44](https://github.com/Vedis44)
 
 ---
 
-[🏠 Retour au dépôt](../../README.md)
+<p align="center">
+  <i>« Une infrastructure n'est vraiment maîtrisée que lorsqu'on est capable de l'expliquer. »</i>
+</p>
